@@ -31,5 +31,4 @@ c3270.keymap:	generic
 c3270.model: 4
 c3270.oversize: 90x43
 c3270.mono: false
-c3270.overlayPaste: true
 c3270.asciiBoxDraw: true
