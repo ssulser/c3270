@@ -4,6 +4,8 @@ A **practical, terminal-native setup** for running **c3270** on macOS using **Te
 
 This repository documents a **working, tested configuration**. It is intentionally opinionated and macOS-specific.
 
+<img width="1024" height="768" alt="image" src="https://github.com/user-attachments/assets/810572ec-03ef-4c08-a21e-47ec876012c4" />
+
 ---
 
 ## Motivation
