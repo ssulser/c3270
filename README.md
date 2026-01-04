@@ -1,105 +1,239 @@
 # c3270 on macOS
 
-Stuff to get a working and nice-looking **c3270** emulator on macOS (Terminal.app).
+A **practical, terminal-native setup** for running **c3270** on macOS using **Terminal.app**, with a classic green-screen look, reliable key mappings, oversize screens, and working copy & paste.
+
+This repository documents a **working, tested configuration**. It is intentionally opinionated and macOS-specific.
+
+---
 
 ## Motivation
 
-I had a hard time getting **c3270** to work *well* and to look *right* on macOS.
-After a lot of trial and error (and some help from ChatGPT), I ended up with a setup that is:
+Getting **c3270** to work *well* on macOS is harder than expected:
 
-* stable and usable for long ISPF sessions
-* keyboard-friendly (Terminal.app quirks handled)
-* classic green-on-black look
-* supports a larger screen (e.g. 90×32)
+- key mappings behave differently than on Linux/X11
+- many Ctrl/Alt combinations are impossible in a terminal
+- copy & paste appears "broken" out of the box
+- default colors and fonts do not resemble a real 3270
+- documentation rarely covers Terminal.app specifics
 
-This repository documents my setup so others don’t have to rediscover it.
+After extensive experimentation, this setup provides:
+
+- stable keyboard behavior in **Terminal.app**
+- reliable Enter / Newline / Backspace handling
+- classic green-on-black appearance
+- optional oversize screens (e.g. 90×32)
+- working mouse-based copy & paste
+
+---
 
 ## Contents
 
-* `c3270pro` — example configuration (copy to `~/.c3270pro`)
-* `3270.terminal` — Terminal.app profile (green-on-black)
-* notes and recommendations
+- `c3270pro` – example configuration (copy to `~/.c3270pro`)
+- `3270.terminal` – Terminal.app profile (colors, cursor, ANSI palette)
+- this README
+
+---
 
 ## Requirements
 
-* macOS
-* Homebrew
-* Terminal.app (this repo targets Terminal.app; iTerm2 will require different key handling)
+- macOS
+- Homebrew
+- Terminal.app (this setup explicitly targets Terminal.app)
 
-## Setup
+---
 
-### 1) Install an IBM 3270 font
+## Installation
 
-```
+### 1. Install an IBM 3270 font
+
+```sh
 brew install --cask font-3270
 ```
 
-You need to select the font manually in Terminal.app later (it is not embedded in the profile template).
+The font must be selected manually later in Terminal.app. It is **not embedded** in the profile.
 
-### 2) Install c3270 (via x3270 package)
+---
 
-```
+### 2. Install c3270
+
+```sh
 brew install x3270
 ```
 
-Despite the name, on modern macOS this effectively gives you **c3270** (not the X11 GUI `x3270`),
-because native X11 isn’t supported anymore (unless you go the XQuartz route, which I wanted to avoid).
+Despite the package name, modern macOS systems only install **c3270** (the curses-based emulator). The X11 GUI `x3270` is not used.
 
-### 3) Install the c3270 configuration
+---
 
-Copy `c3270pro` from this repository to your home directory and rename it to `.c3270pro`:
+### 3. Install the c3270 configuration
 
-```
+```sh
 cp c3270pro ~/.c3270pro
 ```
 
-Note: `.c3270pro` is a hidden file.
+`.c3270pro` is a hidden file in your home directory.
 
-### 4) Import the Terminal.app profile and set the font
+---
+
+### 4. Import the Terminal.app profile
 
 1. Open **Terminal.app**
-2. Settings/Preferences → **Profiles**
+2. Settings / Preferences → **Profiles**
 3. Import `3270.terminal`
 4. Select the imported profile
 5. Set the font manually:
+   - Font: **3270**
+   - Size: **18** (recommended)
 
-   * Font: `3270`
-   * Size: `18` (recommended)
+---
 
-## Recommended screen size
+## Screen Size Configuration
 
-A very comfortable setup for ISPF is:
+This setup uses an **oversize screen** while staying compatible with 3270 semantics.
 
-* Model: `3` (32×80)
-* Oversize: `90×32`
+Recommended:
 
-Example:
-
-```
+```text
 c3270.model: 3
 c3270.oversize: 90x32
 ```
 
-## Notes on key mappings (Terminal limitations)
+- Model 3 = 32×80 base
+- Oversize increases width only
+- Terminal window must be at least 90×32 characters
 
-Terminal-based key handling has real limitations:
+---
 
-* Some Ctrl combinations cannot be distinguished (e.g. `Ctrl+I` is Tab).
-* `Ctrl+1`, `Ctrl+2`, `Ctrl+3` are not reliably available in terminals.
-* Using `U+000D` / `U+0008` / `U+007F` mappings is often more robust than symbolic key names.
+## Mouse Selection & Copy / Paste (Important)
 
-The provided keymap is designed specifically for **Terminal.app** and focuses on:
+### The Problem
 
-* Enter / Newline / Newline+Up
-* Backspace as Erase
-* BackTab, Clear, PF7/PF8
-* Home, Insert, FieldEnd, EraseEOF
-* PA1–PA3 (terminal-friendly bindings)
+By default, **copy & paste appears broken** in c3270:
+
+- no visible mouse selection
+- ⌘C copies nothing
+- ⌘V pastes nothing
+
+This is **not a c3270 bug**.
+
+### The Cause
+
+Terminal.app has a global runtime option:
+
+```
+View → Allow Mouse Reporting
+```
+
+When this is **enabled**, Terminal.app forwards mouse events to applications. In that mode, **Terminal.app disables text selection entirely**.
+
+Fullscreen applications like `c3270`, `vim`, or `tmux` often trigger this.
+
+---
+
+### The Solution
+
+In **Terminal.app**:
+
+```
+View → Allow Mouse Reporting
+```
+
+→ **Disable this option** (no checkmark)
+
+After disabling:
+
+- mouse selection is visible again
+- ⌘C copies selected text
+- ⌘V pastes into c3270 input fields
+- ⌥ + mouse drag enables rectangular selection
+
+> Note: This is a **global menu option**, not a profile setting.
+
+---
+
+## Paste Handling
+
+The commonly referenced resource:
+
+```text
+c3270.marginedPaste
+```
+
+is **not supported** by c3270 and results in a warning.
+
+Instead, this setup uses:
+
+```text
+c3270.overlayPaste: true
+```
+
+This ensures pasted text respects field boundaries and does not overflow protected areas.
+
+---
+
+## Key Bindings (Defined in `.c3270pro`)
+
+The following table documents the **effective key bindings** and their behavior. All bindings are chosen to be **terminal-safe**.
+
+### Input & Editing
+
+| Key         | Action           | Effect                |
+| ----------- | ---------------- | --------------------- |
+| Enter       | `Enter()`        | Submit screen         |
+| Alt + Enter | `Newline()`      | Insert newline        |
+| Ctrl + J    | `Newline() Up()` | Newline and cursor up |
+| Backspace   | `Erase()`        | Delete character left |
+| Insert      | `ToggleInsert()` | Toggle insert mode    |
+| Alt + I     | `ToggleInsert()` | Insert mode fallback  |
+| End         | `FieldEnd()`     | Move to end of field  |
+| Alt + E     | `EraseEOF()`     | Erase to end of field |
+
+### Navigation
+
+| Key         | Action      | Effect              |
+| ----------- | ----------- | ------------------- |
+| Home        | `Home()`    | Move cursor to home |
+| Ctrl + H    | `Home()`    | Home (fallback)     |
+| Shift + Tab | `BackTab()` | Previous field      |
+| Alt + Z     | `BackTab()` | BackTab fallback    |
+
+### PF / PA Keys
+
+| Key              | Action  | Effect              |
+| ---------------- | ------- | ------------------- |
+| Page Up          | `PF(7)` | Scroll up           |
+| Page Down        | `PF(8)` | Scroll down         |
+| Ctrl + A, then 1 | `PA(1)` | Program Attention 1 |
+| Ctrl + A, then 2 | `PA(2)` | Program Attention 2 |
+| Ctrl + A, then 3 | `PA(3)` | Program Attention 3 |
+
+### System Actions
+
+| Key      | Action     | Effect              |
+| -------- | ---------- | ------------------- |
+| Alt + C  | `Clear()`  | Clear screen        |
+| Alt + A  | `Attn()`   | Attention key       |
+| Ctrl + G | `Redraw()` | Redraw screen       |
+| Ctrl + R | `Reset()`  | Reset keyboard lock |
+
+---
+
+## Notes on Terminal Limitations
+
+- Many Ctrl combinations are indistinguishable in terminals
+- `Ctrl+I = Tab`, `Ctrl+M = Enter`, `Ctrl+J = Linefeed`
+- `Ctrl+1`, `Ctrl+2`, `Ctrl+3` do not exist as real terminal keys
+
+This keymap avoids impossible combinations and uses proven fallbacks.
+
+---
 
 ## Disclaimer
 
-This is an opinionated, macOS-specific setup. If it saves you time and frustration, it did its job.
+This is an opinionated, macOS-specific configuration. It favors reliability, clarity, and long interactive sessions over maximal portability.
+
+---
 
 ## License
 
 Do whatever you want with it.
+
