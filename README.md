@@ -1,15 +1,50 @@
-# c3270
-Stuff to get a working und nice looking c3270 emulator with MacOS
+# c3270 on macOS  
+*A practical guide to a working and good-looking 3270 terminal on macOS*
 
-Ich hatte Mühe, unter MacOS eine gut funktionierende und gut aussehende c3270 Emulation hinzukriegen. Nachdem ich es mit viel Probieren und unter Zuhilfenahme von ChatGPT geschafft habe, möchte ich meine Erfahrungen gerne teilen.
+## Motivation
 
-Vorgehen
+I wanted to use **c3270** on macOS for classic mainframe work (ISPF, TSO, Hercules),
+but getting it to work **properly** – and to look **right** – turned out to be harder than expected.
 
-1. Installiere einen IBM 3270 Font
-  brew install --cask font-3270
-Diesen Font muss man in der Terminal.app später manuell setzen, da er nicht in meinem Template enthalten ist.
-3. Installiere x3270
-  brew install x3270
-Obschon da x3270 steht, wird x3270 nicht installiert, sondern nur c3270. X11 wird unter neueren MacOS Versionen nicht mehr unterstützt (Ausnahme XQuartz / aber diesen Weg wollte ich nicht gehen).
-5. kopiere 
-6. 
+Typical problems I ran into:
+
+- confusing key mappings in Terminal.app
+- broken or inconsistent modifier keys (Ctrl / Alt / Meta)
+- ugly default fonts
+- no clear documentation for macOS-specific issues
+- 3270 screen sizes behaving unexpectedly
+
+After a lot of trial and error (and many hours of debugging), I ended up with a setup that is:
+
+- ✅ stable
+- ✅ keyboard-friendly
+- ✅ visually close to a classic 3270 green screen
+- ✅ usable for long ISPF sessions
+
+This repository documents that setup so others don’t have to rediscover everything from scratch.
+
+---
+
+## What this repository contains
+
+- `.c3270pro` – a tested c3270 configuration for macOS  
+- `3270.terminal` – a Terminal.app profile (green-on-black, 3270-style)
+- documentation on fonts, key mappings, and screen size
+- a minimal, reproducible setup
+
+---
+
+## Requirements
+
+- macOS
+- Homebrew
+- Terminal.app (not iTerm2 – this setup is explicitly for Terminal.app)
+
+---
+
+## Installation
+
+### 1. Install an IBM 3270 font
+
+```sh
+brew install --cask font-3270
