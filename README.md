@@ -153,7 +153,7 @@ After disabling:
 
 ## Paste Handling
 
-The commonly referenced resource:
+Commonly referenced resources:
 
 ```text
 c3270.marginedPaste
@@ -161,16 +161,11 @@ c3270.marginedPaste
 
 is **not supported** by c3270 and results in a warning.
 
-~~Instead, this setup uses:
-
 ```text
-c3270.overlayPaste: true
+c3270.overlayPaste
 ```
 
-This ensures pasted text respects field boundaries and does not overflow protected areas.~~
-
-overlayPaste is also **not supported** - but somehow copy & paste works
-
+is **not supported** by c3270 and results in a warning.
 
 ---
 
