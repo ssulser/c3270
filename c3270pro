@@ -1,0 +1,35 @@
+c3270.keymap.generic: \
+  <Key>U+000D: Enter() \n\
+  Alt<Key>U+000D: Newline() \n\
+  Ctrl<Key>j: Newline() Up() \n\
+  <Key>U+0008: Erase() \n\
+  <Key>U+007F: Erase() \n\
+  <Key>BTAB: BackTab() \n\
+  Alt<Key>z: BackTab() \n\
+  Alt<Key>a: Attn() \n\
+  Alt<Key>e: EraseEOF() \n\
+  Alt<Key>c: Clear() \n\
+  <Key>PPAGE: PF(7) \n\
+  <Key>NPAGE: PF(8) \n\
+  <Key>HOME: Home() \n\
+  Ctrl<Key>h: Home() \n\
+  <Key>IC: ToggleInsert() \n\
+  Alt<Key>i: ToggleInsert() \n\
+  <Key>End: FieldEnd() \n\
+  Ctrl<Key>g: Redraw() \n\
+  Ctrl<Key>r: Reset() \n\
+  Ctrl<Key>a <Key>1: PA(1) \n\
+  Ctrl<Key>a <Key>2: PA(2) \n\
+  Ctrl<Key>a <Key>3: PA(3) \n\
+  Ctrl<Key>d: Delete() \n\
+  Alt<Key>w: DeleteWord() \n\
+  Alt<Key>b: PreviousWord() \n\
+  Alt<Key>f: NextWord()
+
+
+c3270.keymap:	generic
+c3270.model: 4
+c3270.oversize: 90x43
+c3270.mono: false
+c3270.overlayPaste: true
+c3270.asciiBoxDraw: true
