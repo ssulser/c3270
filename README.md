@@ -4,7 +4,7 @@ A **practical, terminal-native setup** for running **c3270** on macOS using **Te
 
 This repository documents a **working, tested configuration**. It is intentionally opinionated and macOS-specific.
 
-<img width="1024" height="768" alt="image" src="https://github.com/user-attachments/assets/810572ec-03ef-4c08-a21e-47ec876012c4" />
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/810572ec-03ef-4c08-a21e-47ec876012c4" />
 
 ---
 
@@ -99,8 +99,7 @@ c3270.model: 3
 c3270.oversize: 90x32
 ```
 
-- Model 3 = 32×80 base
-- Oversize increases width only
+- Model 3 = 80x32 base
 - Terminal window must be at least 90×32 characters
 
 ---
