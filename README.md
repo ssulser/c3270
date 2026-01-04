@@ -161,13 +161,16 @@ c3270.marginedPaste
 
 is **not supported** by c3270 and results in a warning.
 
-Instead, this setup uses:
+~~Instead, this setup uses:
 
 ```text
 c3270.overlayPaste: true
 ```
 
-This ensures pasted text respects field boundaries and does not overflow protected areas.
+This ensures pasted text respects field boundaries and does not overflow protected areas.~~
+
+overlayPaste is also **not supported** - but somehow copy & paste works
+
 
 ---
 
