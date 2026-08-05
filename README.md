@@ -87,7 +87,6 @@ cp c3270pro ~/.c3270pro
    - Size: **18** (recommended)
 
 ---
-
 ## Screen Size Configuration
 
 This setup uses an **oversize screen** while staying compatible with 3270 semantics.
@@ -99,11 +98,18 @@ c3270.model: 3
 c3270.oversize: 90x32
 ```
 
-- Model 3 = 80x32 base
+- Model 3 = 80×32 base
 - Terminal window must be at least 90×32 characters
 
----
+> [!WARNING]
+> **IMON370 compatibility:** Greg Price's IMON370 may freeze immediately after startup when using Model 3 or an oversize screen. For IMON370 and other legacy full-screen applications, switch to Model 2 (24×80) and disable `oversize`:
+>
+> ```text
+> c3270.model: 2
+> ! c3270.oversize: 90x32
+> ```
 
+---
 ## Mouse Selection & Copy / Paste (Important)
 
 ### The Problem
